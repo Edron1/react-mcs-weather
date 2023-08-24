@@ -66,7 +66,7 @@ function App() {
     getWeather(city);
   };
   let getWeather = async (value: string) => {
-        const api_url = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}&language=Russian`);
+        const api_url = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}&language=ru`);
         const data = await api_url.json();
         setData(data.results);
   }

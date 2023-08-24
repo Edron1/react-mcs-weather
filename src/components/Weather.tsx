@@ -50,25 +50,20 @@ function Weather(city: any) {
     windspeed: ''
   });
   const [dailyUnits, setDailyUnits] = useState({
-    precipitation_sum: '',
-    shortwave_radiation_sum: '',
-    temperature_2m_max: '',
-    temperature_2m_min: '',
-    time: '',
-    weathercode: '',
-    windspeed_10m_max: ''
+    precipitation_sum: 'мм',
+    shortwave_radiation_sum: 'мДж/м²',
+    temperature_2m_max: '°C',
+    windspeed_10m_max: 'км/ч'
   });
   const [hourlyUnits, setHourlyUnits] = useState({
-    apparent_temperature: '',
-    cloudcover: '',
-    direct_radiation: '',
-    precipitation: '',
-    pressure_msl: '',
-    relativehumidity_2m: '',
-    temperature_2m: '',
-    time: '',
-    weathercode: '',
-    windspeed_10m: ''
+    apparent_temperature: '°C',
+    cloudcover: '%',
+    direct_radiation: 'Вт/м²',
+    precipitation: 'мм',
+    pressure_msl: 'гПа',
+    relativehumidity_2m: '%',
+    temperature_2m: '°C',
+    windspeed_10m: 'км/ч'
   })
 
   let getWeather = async () => {
@@ -78,9 +73,7 @@ function Weather(city: any) {
     setData(data);
     setCurrent(data.current_weather);
     setDailyWeather(data.daily);
-    setDailyUnits(data.daily_units);
     setHourlyWeather(data.hourly);
-    setHourlyUnits(data.hourly_units);
     localStorage.setItem('currentWeather', JSON.stringify(data.current_weather));
 }
 
@@ -95,14 +88,13 @@ function Weather(city: any) {
       style={{marginTop: 30}}
       size="large"
       items={[{ key: '1', label: 'Погода сейчас', children: <div>
-      <div style={{width: 250, marginLeft: 'auto', marginRight: 'auto'}}>
+      <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
         <h2>Погода сейчас</h2>
-        <Card className='Weather-Card' title={current_weather?.time}>
+        <h3>{new Date(current_weather?.time).toLocaleDateString("ru-RU", {day: 'numeric', month: 'numeric', year: 'numeric', weekday: 'long'})+', '+new Date(current_weather?.time).toLocaleTimeString("ru-RU")}</h3>
           <span><img src={uvindex} className='icons'/> {current_weather?.temperature} {dailyUnits?.temperature_2m_max}</span>
-          <span><br/><img src={cloud} className='icons'/> Код погоды - {current_weather?.weathercode} {dailyUnits?.weathercode}</span>
+          <span><br/><img src={cloud} className='icons'/> Код погоды - {current_weather?.weathercode}</span>
           <span><br/><img src={wind} className='icons'/> Направление ветра - {current_weather?.winddirection}</span>
           <span><br/><img src={wind} className='icons'/> Скорость ветра - {current_weather?.windspeed} {dailyUnits?.windspeed_10m_max}</span>
-        </Card>
            
         
       </div>
@@ -117,12 +109,12 @@ function Weather(city: any) {
       <div style={{display: 'flex', flex: '1', flexWrap: 'wrap', justifyContent: 'center'}}>
           {temp.map(index => {
             return <div style={{minWidth: 200, margin: 5}}>
-              <Card hoverable className='Weather-Card' onClick={() => setDayIndex(index)} title={dailyWeather?.time[index]}>        
+              <Card hoverable className='Weather-Card' onClick={() => setDayIndex(index)} title={new Date(dailyWeather?.time[index]).toLocaleDateString("ru-RU", {day: 'numeric', month: 'numeric', year: 'numeric', weekday: 'long'})}>        
                 <span>Сумма осадков - {dailyWeather?.precipitation_sum[index]} {dailyUnits?.precipitation_sum}</span>
                 <span><br/>Коротковолновое излучение - {dailyWeather?.shortwave_radiation_sum[index]} {dailyUnits?.shortwave_radiation_sum}</span>
                 <span><br/><img src={uvindex} className='icons'/> Макс. температура - {dailyWeather?.temperature_2m_max[index]} {dailyUnits?.temperature_2m_max}</span>
-                <span><br/><img src={uvindex} className='icons'/> Мин. температура - {dailyWeather?.temperature_2m_min[index]} {dailyUnits?.temperature_2m_min}</span>
-                <span><br/><img src={cloud} className='icons'/> Код погоды - {dailyWeather?.weathercode[index]} {dailyUnits?.weathercode}</span>
+                <span><br/><img src={uvindex} className='icons'/> Мин. температура - {dailyWeather?.temperature_2m_min[index]} {dailyUnits?.temperature_2m_max}</span>
+                <span><br/><img src={cloud} className='icons'/> Код погоды - {dailyWeather?.weathercode[index]}</span>
                 <span><br/> <img src={wind} className='icons'/> Макс. скорость ветра - {dailyWeather?.windspeed_10m_max[index]} {dailyUnits?.windspeed_10m_max}</span>
               </Card>
             </div>
@@ -139,7 +131,7 @@ function Weather(city: any) {
       <div style={{display: 'flex', flex: '1', flexWrap: 'wrap', justifyContent: 'center'}}>
       {temp2[dayIndex as keyof typeof temp2].map(index => {
         return <div style={{minWidth: 200, margin: 5}}>
-          <Card className='Weather-Card' title={hourlyWeather?.time[index]}>        
+          <Card className='Weather-Card' title={new Date(hourlyWeather?.time[index]).toLocaleDateString("ru-RU")+', '+new Date(hourlyWeather?.time[index]).toLocaleTimeString("ru-RU", {hour: '2-digit', minute:'2-digit'})}>        
             <span><img src={uvindex} className='icons'/> Ощущаемая температура - {hourlyWeather?.apparent_temperature[index]} {hourlyUnits?.apparent_temperature}</span>
             <span><br/><img src={cloud} className='icons'/> Облачность - {hourlyWeather?.cloudcover[index]} {hourlyUnits?.cloudcover}</span>
             <span><br/>Прямое излучение - {hourlyWeather?.direct_radiation[index]} {hourlyUnits?.direct_radiation}</span>
@@ -147,7 +139,7 @@ function Weather(city: any) {
             <span><br/><img src={gauge} className='icons'/> Давление - {hourlyWeather?.pressure_msl[index]} {hourlyUnits?.pressure_msl}</span>
             <span><br/><img src={humidity} className='icons'/> Относительная влажность - {hourlyWeather?.relativehumidity_2m[index]} {hourlyUnits?.relativehumidity_2m}</span>
             <span><br/><img src={uvindex} className='icons'/> Температура - {hourlyWeather?.temperature_2m[index]} {hourlyUnits?.temperature_2m}</span>
-            <span><br/><img src={cloud} className='icons'/> Код погоды - {hourlyWeather?.weathercode[index]} {hourlyUnits?.weathercode}</span>
+            <span><br/><img src={cloud} className='icons'/> Код погоды - {hourlyWeather?.weathercode[index]}</span>
             <span><br/><img src={wind} className='icons'/> Скорость ветра - {hourlyWeather?.windspeed_10m[index]} {hourlyUnits?.windspeed_10m}</span>
           </Card>
         </div>
