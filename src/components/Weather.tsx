@@ -7,7 +7,6 @@ import cloud from '../img/icons/cloud.png';
 import uvindex from '../img/icons/uv-index.png';
 
 function Weather(city: any) {
-
   const [data, setData] = useState();
   const [temp] = useState([0, 1, 2, 3, 4, 5, 6]);
   const [temp2] = useState({
@@ -75,7 +74,7 @@ function Weather(city: any) {
 
   let getWeather = async () => {
     let temp = JSON.parse(localStorage.getItem('selectCity') || '{}');
-    const api_url = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${temp?.latitude}&longitude=${temp?.longitude}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,pressure_msl,precipitation,cloudcover,direct_radiation,windspeed_10m,weathercode&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,shortwave_radiation_sum&timezone=${temp.timezone}&current_weather=true
+    const api_url = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${temp?.latitude}&longitude=${temp?.longitude}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,pressure_msl,precipitation,cloudcover,direct_radiation,windspeed_10m,weathercode&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,shortwave_radiation_sum&timezone=${temp?.timezone}&current_weather=true
     `);
     const data = await api_url.json();
     setData(data);
@@ -92,47 +91,56 @@ function Weather(city: any) {
   return (
     <div>
       {current_weather ? 
-      <div>
-      <div 
-        style={{marginLeft: 'auto', marginRight: 'auto'}}>
-        <h2>Погода сейчас</h2>
-        <h3>
-          {new Date(current_weather?.time).toLocaleDateString("ru-RU", {day: 'numeric', month: 'numeric', year: 'numeric', weekday: 'long'})+', '
-          +new Date(current_weather?.time).toLocaleTimeString("ru-RU")}
-        </h3>
-        <span>
-            <img 
-              src={uvindex} 
-              className='icons'
-            /> 
+      <div className='background'>
+        <div 
+          className='columns'
+          >
+          <div style={{marginRight: 'auto', marginLeft: '10%', paddingTop: '50px'}}>
+            <h1 style={{color: 'white'}}>{city.city?.name}, {city.city?.country}</h1>
+            <h3 style={{color: 'white'}}>
+              {new Date(current_weather?.time).toLocaleDateString("ru-RU", {day: 'numeric', month: 'numeric', year: 'numeric', weekday: 'long'})+', '
+              +new Date(current_weather?.time).toLocaleTimeString("ru-RU")}
+            </h3>
+            <div style={{backgroundColor: 'white', borderRadius: '15px'}}>
+              <div style={{color: 'black', display: 'flex', flex: '1', flexWrap: 'wrap', justifyContent: 'center', backgroundColor: '#87CEFA'}}>
+                <div style={{backgroundColor: '#4169E1', width: 32, height: 32, borderRadius: '5px', marginRight: '10px'}}>
+                  <img 
+                    style={{verticalAlign: 'middle'}}
+                    src={cloud} 
+                    className='icons'
+                  /> 
+                </div>
+                Код погоды - {current_weather?.weathercode}
+              </div>
+              <div style={{color: 'black', display: 'flex', flex: '1', flexWrap: 'wrap', justifyContent: 'center'}}>
+                <div style={{backgroundColor: '#4169E1', width: 32, height: 32, borderRadius: '5px', marginRight: '10px'}}>
+                  <img 
+                    style={{verticalAlign: 'middle'}}
+                    src={wind}  
+                    className='icons'
+                  /> 
+                </div>
+                Направление ветра - {current_weather?.winddirection}
+              </div>
+              <div style={{color: 'black', display: 'flex', flex: '1', flexWrap: 'wrap', justifyContent: 'center'}}>
+                <div style={{backgroundColor: '#4169E1', width: 32, height: 32, borderRadius: '5px', marginRight: '10px'}}>
+                  <img 
+                    style={{verticalAlign: 'middle'}}
+                    src={wind}  
+                    className='icons'
+                  /> 
+                </div>
+                Скорость ветра - {current_weather?.windspeed} {dailyUnits?.windspeed_10m_max}
+              </div>
+            </div>
+          </div>
+          <div style={{marginLeft: 'auto', marginRight: '10%', paddingTop: '50px'}}>
+              <div style={{borderRadius: '15px', height: '100%', width: '100%', backgroundColor: '#6A5ACD', fontSize: 30, color: 'white'}}> 
                 {current_weather?.temperature} {dailyUnits?.temperature_2m_max}
-        </span>
-        <span>
-          <br/>
-          <img 
-            src={cloud} 
-            className='icons'
-          /> 
-              Код погоды - {current_weather?.weathercode}
-        </span>
-        <span>
-          <br/>
-          <img 
-            src={wind} 
-            className='icons'
-          /> 
-              Направление ветра - {current_weather?.winddirection}
-        </span>
-        <span>
-          <br/>
-          <img 
-            src={wind} 
-            className='icons'
-          /> 
-              Скорость ветра - {current_weather?.windspeed} {dailyUnits?.windspeed_10m_max}
-        </span>
-           
-        
+              </div>
+          </div>  
+          
+          
       </div>
     </div> 
     : ''}

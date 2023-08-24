@@ -17,8 +17,13 @@ function App() {
   };
   function success(pos: any) {
     var crd = pos.coords;
-    localStorage.setItem('selectCity', crd);
-    let temp = localStorage.getItem('selectCity');
+    console.log('crd', crd);
+    console.log("Your current position is:");
+    console.log(`Latitude : ${crd.latitude}`);
+    console.log(`Longitude: ${crd.longitude}`);
+    console.log(`More or less ${crd.accuracy} meters.`);
+    // localStorage.setItem('selectCity', crd);
+    // let temp = localStorage.getItem('selectCity');
   }
 
   function errors(err: any) {
@@ -92,6 +97,7 @@ function App() {
             return <Card 
               onClick={() => {
                 setSelectCity(item); 
+                console.log('city', item);
                 localStorage.setItem('selectCity', JSON.stringify(item));
               }} 
               hoverable 

@@ -44,3 +44,16 @@
   width: 16px;
   height: 16px;
 }
+.background {
+  background-image: url("./img/bg.jpg");
+  background-size: contain;
+  height: 350px;
+  width: 90%;
+  margin: auto;
+  border-radius: 15px;
+}
+.columns {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 50% 50%;
+}
