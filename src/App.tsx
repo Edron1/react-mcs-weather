@@ -27,6 +27,7 @@ function App() {
 
   useEffect(() => {
     let temp = JSON.parse(localStorage.getItem('selectCity') || '{}');
+    console.log('temp', temp);
     setSelectCity(temp);
     // if(!!temp) {
     //   setSelectCity(JSON.parse(temp));
@@ -77,8 +78,15 @@ function App() {
         Выбрать город
       </Button>
 
-      <Modal title="Выбрать город" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <Input type="text" value={city} onChange={handleChange}/>
+      <Modal 
+        title="Выбрать город" 
+        open={isModalOpen} 
+        onOk={handleOk} 
+        onCancel={handleCancel}>
+        <Input 
+          type="text" 
+          value={city} 
+          onChange={handleChange}/>
         <div>
           {data?.map(item => {
             return <Card 
@@ -89,9 +97,15 @@ function App() {
               hoverable 
               size='small' 
               style={{marginTop: 10}}>
-              <div style={{display: 'inline'}}>
-                <span>{item.country}</span> 
-                <span style={{marginLeft: 5}}>{item.name}</span>
+              <div 
+                style={{display: 'inline'}}>
+                  <span>
+                    {item.country}
+                  </span> 
+                  <span 
+                    style={{marginLeft: 5}}>
+                      {item.name}
+                  </span>
               </div>
               <p>{item.admin1}</p>
             </Card>
